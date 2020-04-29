@@ -1,3 +1,12 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="keyline_0_25">2dp</dimen>
+    <dimen name="keyline_0_5">4dp</dimen>
+    <dimen name="keyline_1">8dp</dimen>
+    <dimen name="keyline_2">16dp</dimen>
+    <dimen name="keyline_3">24dp</dimen>
+    <dimen name="keyline_4">32dp</dimen>
+    <dimen name="keyline_5">40dp</dimen>
+    <dimen name="keyline_6">48dp</dimen>
 </resources>
