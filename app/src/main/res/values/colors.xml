@@ -6,6 +6,7 @@
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="slate">#4e5f70</color>
 
     <color name="button_enabled">#00aac6</color>
     <color name="button_disabled">#6400aac6</color>
