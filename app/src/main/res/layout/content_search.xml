@@ -22,7 +22,10 @@
             android:id="@+id/searchQuery"
             style="@style/Block"
             android:padding="@dimen/keyline_2"
-            android:hint="Search Query" />
+            android:hint="Search Query"
+            android:inputType="textAutoComplete"
+            android:maxLines="1"
+            android:imeOptions="actionDone"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton

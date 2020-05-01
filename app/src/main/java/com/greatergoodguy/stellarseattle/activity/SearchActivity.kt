@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.greatergoodguy.stellarseattle.R
+import com.greatergoodguy.stellarseattle.adapter.SearchSuggestionsAdapter
 import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import kotlinx.android.synthetic.main.activity_search.*
@@ -41,33 +42,24 @@ class SearchActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        autoComplete = findViewById<AutoCompleteTextView>(R.id.searchQuery)
+        autoComplete = findViewById(R.id.searchQuery)
         autoComplete.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                Log.d("SearchActivity", "onTextChanged: " + s.toString())
                 getSearchSuggestions(s.toString())
 
             }
         })
 
-        typeAheadAdapter = ArrayAdapter<String>(this, android.R.layout.select_dialog_item, mutableListOf())
+        typeAheadAdapter = SearchSuggestionsAdapter(this, android.R.layout.select_dialog_item, mutableListOf())
         autoComplete.threshold = 2
         autoComplete.setAdapter(typeAheadAdapter)
     }
 
-    var typeAheadWords = mutableListOf(
-        "Paries, France",
-        "PA, United States",
-        "Parana, Brazil",
-        "Padua, Italy",
-        "Pasadena, CA, United States"
-    )
-
-
     private fun getSearchSuggestions(query: String) {
-        if(query.length < 2) {
+        if(query.trim().length < 2) {
+            updateTypeAheadWords(listOf())
             return
         }
 
@@ -83,7 +75,6 @@ class SearchActivity : AppCompatActivity() {
             )
 
             val newTypeAheadWords = getSearchSuggestionsResponse?.response?.minivenues?.map { it.name } ?: listOf()
-            Log.d("SearchActivity", newTypeAheadWords.toString())
             runOnUiThread {
                 updateTypeAheadWords(newTypeAheadWords)
             }
@@ -94,21 +85,5 @@ class SearchActivity : AppCompatActivity() {
         typeAheadAdapter.clear()
         typeAheadAdapter.addAll(newTypeAheadWords)
         typeAheadAdapter.notifyDataSetChanged()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 }
