@@ -29,7 +29,7 @@ class VenueItemAdapter(private val myDataset: List<VenueItem>) : RecyclerView.Ad
         val venueItem = myDataset[position]
 
         holder.tvName.text = venueItem.name
-        holder.tvCategories.text = venueItem.categories[0]
+        holder.tvCategories.text = venueItem.categories.joinToString(separator = ",")
         holder.tvFormattedAddress.text = venueItem.formattedAddress
     }
 
