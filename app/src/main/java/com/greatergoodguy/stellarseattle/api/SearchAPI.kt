@@ -1,9 +1,8 @@
 package com.greatergoodguy.stellarseattle.api
 
-import com.greatergoodguy.stellarseattle.data.VenueResponse
+import com.greatergoodguy.stellarseattle.data.GetVenuesResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
-
 
 interface SearchAPI {
     @GET("/v2/venues/search")
@@ -14,5 +13,5 @@ interface SearchAPI {
         @Query("query") placeType: String?,
         @Query("v") version: String?,
         @Query("limit") limit: Int?
-    )
+    ): GetVenuesResponse
 }

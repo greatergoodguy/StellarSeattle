@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.domain.VenueItem
 
-class VenueItemAdapter(private val myDataset: MutableList<VenueItem>) : RecyclerView.Adapter<VenueItemAdapter.ViewHolder>() {
+class VenueItemAdapter(private val myDataset: List<VenueItem>) : RecyclerView.Adapter<VenueItemAdapter.ViewHolder>() {
 
     class ViewHolder(
         container: ViewGroup,
