@@ -18,10 +18,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/keyline_2">
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/searchQuery"
             style="@style/Block"
-            android:hint="Search Query"
-            android:inputType="textAutoComplete" />
+            android:padding="@dimen/keyline_2"
+            android:hint="Search Query" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
