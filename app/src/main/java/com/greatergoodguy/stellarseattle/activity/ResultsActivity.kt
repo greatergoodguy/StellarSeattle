@@ -8,6 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.adapter.VenueItemAdapter
 import com.greatergoodguy.stellarseattle.domain.VenueItem
+import com.greatergoodguy.stellarseattle.api.APIClient
+import com.greatergoodguy.stellarseattle.api.SearchAPI
+import com.greatergoodguy.stellarseattle.data.VenueResponse
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ResultsActivity : AppCompatActivity() {
 
@@ -48,6 +54,15 @@ class ResultsActivity : AppCompatActivity() {
                 context,
                 DividerItemDecoration.VERTICAL
             ))
+        }
+
+        getVenueResponses()
+    }
+
+    private fun getVenueResponses() {
+        GlobalScope.launch {
+            val searchAPI = APIClient.client?.create(SearchAPI::class.java)
+            searchAPI?.getVenues("VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D", "GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ", "Seattle,+WA", "coffee", "20180401", 20)
         }
     }
 }
