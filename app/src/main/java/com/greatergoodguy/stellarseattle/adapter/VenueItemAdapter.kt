@@ -1,24 +1,29 @@
 package com.greatergoodguy.stellarseattle.adapter
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.domain.VenueItem
+import com.squareup.picasso.Picasso
 import kotlin.math.asin
 import kotlin.math.cos
 import kotlin.math.sqrt
 
-class VenueItemAdapter(private val myDataset: List<VenueItem>) : RecyclerView.Adapter<VenueItemAdapter.ViewHolder>() {
+class VenueItemAdapter(private val context: Context, private val myDataset: List<VenueItem>) : RecyclerView.Adapter<VenueItemAdapter.ViewHolder>() {
 
     class ViewHolder(
         container: ViewGroup,
         val tvName: TextView,
         val tvCategories: TextView,
         val tvFormattedAddress: TextView,
-        val tvLatLong: TextView
+        val tvLatLong: TextView,
+        val ivIcon: ImageView
     ) : RecyclerView.ViewHolder(container)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,7 +32,8 @@ class VenueItemAdapter(private val myDataset: List<VenueItem>) : RecyclerView.Ad
         val tvCategories  = container.findViewById<TextView>(R.id.categories)
         val tvFormattedAddress = container.findViewById<TextView>(R.id.formattedAddress)
         val tvLatLong = container.findViewById<TextView>(R.id.latLong)
-        return ViewHolder(container, tvName, tvCategories, tvFormattedAddress, tvLatLong)
+        val ivIcon = container.findViewById<ImageView>(R.id.categoryIcon)
+        return ViewHolder(container, tvName, tvCategories, tvFormattedAddress, tvLatLong, ivIcon)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -41,6 +47,8 @@ class VenueItemAdapter(private val myDataset: List<VenueItem>) : RecyclerView.Ad
         var seattleLong = -122.3321F
         var distance = distance(seattleLat, seattleLong, venueItem.latitude, venueItem.longitude)
         holder.tvLatLong.text = "%.2f".format(distance) + " km"
+
+        Picasso.with(context).load(venueItem.iconUrl).into(holder.ivIcon)
     }
 
     override fun getItemCount() = myDataset.size

@@ -7,10 +7,18 @@
     android:clickable="true"
     android:background="?attr/selectableItemBackground">
 
+    <ImageView
+        android:id="@+id/categoryIcon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentEnd="true" />
+
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/categoryIcon"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:text="Name"/>
@@ -19,6 +27,8 @@
         android:id="@+id/categories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/categoryIcon"
         android:layout_below="@id/name"
         tools:text="Categories"/>
 
@@ -26,6 +36,8 @@
         android:id="@+id/formattedAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/categoryIcon"
         android:layout_below="@id/categories"
         tools:text="Formatted Address"/>
 
@@ -33,6 +45,8 @@
         android:id="@+id/latLong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/categoryIcon"
         android:layout_below="@id/formattedAddress"
         tools:text="Latitude, Longitude"/>
 </RelativeLayout>

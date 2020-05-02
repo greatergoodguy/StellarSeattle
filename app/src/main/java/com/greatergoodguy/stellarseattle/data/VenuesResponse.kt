@@ -26,11 +26,11 @@ class VenuesResponse (
                 return VenueItem(
                     id = id,
                     name = name,
-                    verified = verified,
                     categories = categories.map { it.name },
+                    formattedAddress = if(location.formattedAddress.isNotEmpty()) location.formattedAddress[0] else "",
                     latitude = location.lat,
                     longitude = location.lng,
-                    formattedAddress = if(location.formattedAddress.isNotEmpty()) location.formattedAddress[0] else ""
+                    iconUrl = if(categories.isNotEmpty()) categories[0].icon.prefix + "bg_64" + categories[0].icon.suffix else ""
                 )
             }
 
@@ -38,8 +38,14 @@ class VenuesResponse (
                 val id: String,
                 val name: String,
                 val pluralName: String,
-                val shortName: String
-            )
+                val shortName: String,
+                val icon: Icon
+            ) {
+                class Icon (
+                    val prefix: String,
+                    val suffix: String
+                )
+            }
 
             class Location (
                 val address: String,

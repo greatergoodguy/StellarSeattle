@@ -32,7 +32,7 @@ class ResultsActivity : AppCompatActivity() {
         spinner = findViewById(R.id.spinner)
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = VenueItemAdapter(items)
+        viewAdapter = VenueItemAdapter(baseContext, items)
 
         recyclerView = findViewById<RecyclerView>(R.id.resultsList).apply {
             layoutManager = viewManager
