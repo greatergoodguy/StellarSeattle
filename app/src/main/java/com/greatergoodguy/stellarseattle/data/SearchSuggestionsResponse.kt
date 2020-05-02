@@ -1,6 +1,6 @@
 package com.greatergoodguy.stellarseattle.data
 
-class GetSearchSuggestionsResponse (
+class SearchSuggestionsResponse (
     val meta: Meta,
     val response: Response
 ) {

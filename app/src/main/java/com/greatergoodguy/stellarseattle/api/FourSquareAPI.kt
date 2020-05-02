@@ -1,7 +1,7 @@
 package com.greatergoodguy.stellarseattle.api
 
-import com.greatergoodguy.stellarseattle.data.GetSearchSuggestionsResponse
-import com.greatergoodguy.stellarseattle.data.GetVenuesResponse
+import com.greatergoodguy.stellarseattle.data.SearchSuggestionsResponse
+import com.greatergoodguy.stellarseattle.data.VenuesResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -14,7 +14,7 @@ interface FourSquareAPI {
         @Query("query") query: String?,
         @Query("v") version: String?,
         @Query("limit") limit: Int?
-    ): GetVenuesResponse
+    ): VenuesResponse
 
     @GET("/v2/venues/suggestcompletion")
     suspend fun getSearchSuggestions(
@@ -24,6 +24,6 @@ interface FourSquareAPI {
         @Query("query") query: String?,
         @Query("v") version: String?,
         @Query("limit") limit: Int?
-    ): GetSearchSuggestionsResponse
+    ): SearchSuggestionsResponse
 
 }

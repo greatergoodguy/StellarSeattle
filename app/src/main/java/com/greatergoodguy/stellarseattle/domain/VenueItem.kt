@@ -5,5 +5,7 @@ class VenueItem (
     val name: String,
     val verified: Boolean,
     val categories: List<String>,
-    val formattedAddress: String
+    val formattedAddress: String,
+    val latitude: Float,
+    val longitude: Float
 )

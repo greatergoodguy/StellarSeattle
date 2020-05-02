@@ -2,7 +2,7 @@ package com.greatergoodguy.stellarseattle.data
 
 import com.greatergoodguy.stellarseattle.domain.VenueItem
 
-class GetVenuesResponse (
+class VenuesResponse (
     val meta: Meta,
     val response: Response
 ) {
@@ -28,6 +28,8 @@ class GetVenuesResponse (
                     name = name,
                     verified = verified,
                     categories = categories.map { it.name },
+                    latitude = location.lat,
+                    longitude = location.lng,
                     formattedAddress = if(location.formattedAddress.isNotEmpty()) location.formattedAddress[0] else ""
                 )
             }
@@ -43,6 +45,8 @@ class GetVenuesResponse (
                 val address: String,
                 val crossStreet: String,
                 val postalCode: String,
+                val lat: Float,
+                val lng: Float,
                 val formattedAddress: List<String>
             )
         }

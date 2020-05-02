@@ -11,30 +11,28 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="Name"/>
 
     <TextView
         android:id="@+id/categories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Categories"
-        android:layout_below="@id/name" />
+        android:layout_below="@id/name"
+        tools:text="Categories"/>
 
     <TextView
         android:id="@+id/formattedAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Formatted Address"
-        android:layout_below="@id/categories" />
+        android:layout_below="@id/categories"
+        tools:text="Formatted Address"/>
 
     <TextView
-        android:id="@+id/price"
+        android:id="@+id/latLong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="$15.35"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone"/>
+        android:layout_below="@id/formattedAddress"
+        tools:text="Latitude, Longitude"/>
 </RelativeLayout>
