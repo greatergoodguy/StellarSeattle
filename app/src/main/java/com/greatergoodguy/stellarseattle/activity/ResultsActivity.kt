@@ -47,16 +47,18 @@ class ResultsActivity : AppCompatActivity() {
             ))
         }
 
-        getVenueResponses()
+        var searchQuery: String = intent.getStringExtra(KEY_SEARCHQUERY).orEmpty()
+        getVenueResponses(searchQuery)
     }
 
-    private fun getVenueResponses() {
+    private fun getVenueResponses(searchQuery: String) {
+
         spinner.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
         GlobalScope.launch {
             try {
                 val searchAPI = APIClient.client?.create(FourSquareAPI::class.java)
-                val getVenuesResponse = searchAPI?.getVenues("VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D", "GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ", "Seattle,+WA", "coffee", "20180401", 20)
+                val getVenuesResponse = searchAPI?.getVenues("VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D", "GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ", "Seattle,+WA", searchQuery, "20180401", 20)
                 val venueItems = getVenuesResponse?.response?.venues?.map { it.toVenueItem() } ?: listOf()
                 runOnUiThread {
                     updateList(venueItems)
@@ -81,5 +83,9 @@ class ResultsActivity : AppCompatActivity() {
     private fun showError() {
         spinner.visibility = View.GONE
         recyclerView.visibility = View.GONE
+    }
+
+    companion object {
+        const val KEY_SEARCHQUERY = "KEY_SEARCHQUERY"
     }
 }

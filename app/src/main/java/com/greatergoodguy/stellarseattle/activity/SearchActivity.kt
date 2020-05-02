@@ -39,6 +39,7 @@ class SearchActivity : AppCompatActivity() {
 
         findViewById<MaterialButton>(R.id.layoutButton).setOnClickListener {
             val intent = Intent(this, ResultsActivity::class.java)
+            intent.putExtra(ResultsActivity.KEY_SEARCHQUERY, autoComplete.text.toString())
             startActivity(intent)
         }
 
