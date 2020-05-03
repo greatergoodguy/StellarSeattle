@@ -14,7 +14,6 @@ import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.domain.VenueItem
 import com.greatergoodguy.stellarseattle.util.toPx
 import kotlinx.android.synthetic.main.activity_map.*
-import kotlin.math.min
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -25,7 +24,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        intent.getSerializableExtra(KEY_VENUITEMS)?.let {
+        intent.getSerializableExtra(KEY_VENUEITEMS)?.let {
             items = it as ArrayList<VenueItem>
         }
 
@@ -66,6 +65,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     companion object {
-        const val KEY_VENUITEMS = "KEY_VENUITEMS"
+        const val KEY_VENUEITEMS = "KEY_VENUEITEMS"
     }
 }

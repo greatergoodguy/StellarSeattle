@@ -2,13 +2,11 @@ package com.greatergoodguy.stellarseattle.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.adapter.VenueItemAdapter
 import com.greatergoodguy.stellarseattle.domain.VenueItem
@@ -16,8 +14,6 @@ import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import kotlinx.android.synthetic.main.activity_results.*
 import kotlinx.android.synthetic.main.activity_results.fab
-import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.content_search.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -35,12 +31,17 @@ class ResultsActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
-            intent.putExtra(MapActivity.KEY_VENUITEMS, ArrayList(items))
+            intent.putExtra(MapActivity.KEY_VENUEITEMS, ArrayList(items))
             startActivity(intent)
         }
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = VenueItemAdapter(baseContext, items)
+        viewAdapter = VenueItemAdapter(baseContext, items, object: VenueItemAdapter.OnItemClickListener {
+            override fun onItemClick(item: VenueItem) {
+                val intent = Intent(this@ResultsActivity, VenueDetailsActivity::class.java)
+                startActivity(intent)
+            }
+        })
 
         recyclerView.apply {
             layoutManager = viewManager

@@ -1,9 +1,9 @@
 package com.greatergoodguy.stellarseattle.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -15,7 +15,7 @@ import kotlin.math.asin
 import kotlin.math.cos
 import kotlin.math.sqrt
 
-class VenueItemAdapter(private val context: Context, private val myDataset: List<VenueItem>) : RecyclerView.Adapter<VenueItemAdapter.ViewHolder>() {
+class VenueItemAdapter(private val context: Context, private val myDataset: List<VenueItem>, val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<VenueItemAdapter.ViewHolder>() {
 
     class ViewHolder(
         container: ViewGroup,
@@ -49,6 +49,10 @@ class VenueItemAdapter(private val context: Context, private val myDataset: List
         holder.tvLatLong.text = "%.2f".format(distance) + " km"
 
         Picasso.with(context).load(venueItem.iconUrl).into(holder.ivIcon)
+
+        holder.itemView.setOnClickListener {
+            itemClickListener.onItemClick(venueItem)
+        }
     }
 
     override fun getItemCount() = myDataset.size
@@ -60,5 +64,9 @@ class VenueItemAdapter(private val context: Context, private val myDataset: List
                 (1 - cos((long2 - long1) * p))/2;
 
         return (12742 * asin(sqrt(a))).toFloat(); // 2 * R; R = 6371 km
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(item: VenueItem)
     }
 }
