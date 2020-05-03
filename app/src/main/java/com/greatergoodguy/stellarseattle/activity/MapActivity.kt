@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_map.*
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private var items: ArrayList<VenueItem> = ArrayList()
+    private lateinit var items: ArrayList<VenueItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

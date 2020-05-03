@@ -2,6 +2,7 @@ package com.greatergoodguy.stellarseattle.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -39,6 +40,7 @@ class ResultsActivity : AppCompatActivity() {
         viewAdapter = VenueItemAdapter(baseContext, items, object: VenueItemAdapter.OnItemClickListener {
             override fun onItemClick(item: VenueItem) {
                 val intent = Intent(this@ResultsActivity, VenueDetailsActivity::class.java)
+                intent.putExtra(VenueDetailsActivity.KEY_VENUE, item)
                 startActivity(intent)
             }
         })
