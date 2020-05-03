@@ -2,6 +2,7 @@ package com.greatergoodguy.stellarseattle.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -34,6 +35,7 @@ class ResultsActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
+            intent.putExtra(MapActivity.KEY_VENUITEMS, ArrayList(items))
             startActivity(intent)
         }
 

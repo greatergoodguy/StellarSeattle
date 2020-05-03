@@ -33,10 +33,8 @@ class SearchActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         layoutButton.setOnClickListener {
-//            val intent = Intent(this, ResultsActivity::class.java)
-//            intent.putExtra(ResultsActivity.KEY_SEARCHQUERY, inputField.text.toString())
-//            startActivity(intent)
-            val intent = Intent(this, MapActivity::class.java)
+            val intent = Intent(this, ResultsActivity::class.java)
+            intent.putExtra(ResultsActivity.KEY_SEARCHQUERY, inputField.text.toString())
             startActivity(intent)
         }
 

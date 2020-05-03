@@ -8,16 +8,26 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.UiSettings
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.greatergoodguy.stellarseattle.R
+import com.greatergoodguy.stellarseattle.domain.VenueItem
+import com.greatergoodguy.stellarseattle.util.toPx
 import kotlinx.android.synthetic.main.activity_map.*
+import kotlin.math.min
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    private var items: ArrayList<VenueItem> = ArrayList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+
+        intent.getSerializableExtra(KEY_VENUITEMS)?.let {
+            items = it as ArrayList<VenueItem>
+        }
 
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -27,8 +37,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapView.onResume()
 
         map?.let {
-            map.setMinZoomPreference(12F)
-            map.setMaxZoomPreference(15F)
             map.isIndoorEnabled = true
 
             val uiSettings: UiSettings = map.uiSettings
@@ -43,9 +51,21 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             map.addMarker(MarkerOptions().position(seattle).title("Seattle").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
             map.moveCamera(CameraUpdateFactory.newLatLng(seattle))
 
+            val builder = LatLngBounds.Builder()
+            for(item in items) {
+                val markerOption = MarkerOptions().position(LatLng(item.latitude.toDouble(), item.longitude.toDouble())).title(item.name)
+                builder.include(markerOption.position)
+                map.addMarker(markerOption)
+            }
+            val bounds = builder.build()
 
-            map.addMarker(MarkerOptions().position(LatLng(47.60475923205166, -122.33636210125788)).title("Storyville Coffee Company"))
-            map.addMarker(MarkerOptions().position(LatLng(47.61340942776967, -122.33469499761385)).title("Anchorhead Coffee Co"))
+            val padding = 48.toPx() // offset from edges of the map in pixels
+            val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+            map.moveCamera(cameraUpdate)
         }
+    }
+
+    companion object {
+        const val KEY_VENUITEMS = "KEY_VENUITEMS"
     }
 }
