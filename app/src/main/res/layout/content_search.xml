@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/keyline_2">
         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-            android:id="@+id/searchQuery"
+            android:id="@+id/inputField"
             style="@style/Block"
             android:padding="@dimen/keyline_2"
             android:hint="Search Query"

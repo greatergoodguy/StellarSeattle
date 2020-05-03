@@ -19,32 +19,28 @@ import com.greatergoodguy.stellarseattle.adapter.SearchSuggestionsAdapter
 import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.content_search.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var typeAheadAdapter: ArrayAdapter<String>
-    private lateinit var autoComplete: AutoCompleteTextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-
-        findViewById<MaterialButton>(R.id.layoutButton).setOnClickListener {
-            val intent = Intent(this, ResultsActivity::class.java)
-            intent.putExtra(ResultsActivity.KEY_SEARCHQUERY, autoComplete.text.toString())
+        layoutButton.setOnClickListener {
+//            val intent = Intent(this, ResultsActivity::class.java)
+//            intent.putExtra(ResultsActivity.KEY_SEARCHQUERY, inputField.text.toString())
+//            startActivity(intent)
+            val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
         }
 
-        autoComplete = findViewById(R.id.searchQuery)
-        autoComplete.addTextChangedListener(object : TextWatcher {
+        inputField.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -54,8 +50,8 @@ class SearchActivity : AppCompatActivity() {
         })
 
         typeAheadAdapter = SearchSuggestionsAdapter(this, android.R.layout.select_dialog_item, mutableListOf())
-        autoComplete.threshold = 2
-        autoComplete.setAdapter(typeAheadAdapter)
+        inputField.threshold = 2
+        inputField.setAdapter(typeAheadAdapter)
     }
 
     private fun getSearchSuggestions(query: String) {

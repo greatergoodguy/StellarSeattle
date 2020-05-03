@@ -1,25 +1,28 @@
 package com.greatergoodguy.stellarseattle.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.adapter.VenueItemAdapter
 import com.greatergoodguy.stellarseattle.domain.VenueItem
 import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
+import kotlinx.android.synthetic.main.activity_results.*
+import kotlinx.android.synthetic.main.activity_results.fab
+import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.content_search.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class ResultsActivity : AppCompatActivity() {
 
-    private lateinit var spinner: View
-
-    private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
@@ -29,15 +32,17 @@ class ResultsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_results)
 
-        spinner = findViewById(R.id.spinner)
+        fab.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            startActivity(intent)
+        }
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = VenueItemAdapter(baseContext, items)
 
-        recyclerView = findViewById<RecyclerView>(R.id.resultsList).apply {
+        recyclerView.apply {
             layoutManager = viewManager
             adapter = viewAdapter
-
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
@@ -52,7 +57,7 @@ class ResultsActivity : AppCompatActivity() {
     }
 
     private fun getVenueResponses(searchQuery: String) {
-
+        fab.visibility = View.GONE
         spinner.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
         GlobalScope.launch {
@@ -72,6 +77,7 @@ class ResultsActivity : AppCompatActivity() {
     }
 
     private fun updateList(venueItems: List<VenueItem>) {
+        fab.visibility = View.VISIBLE
         spinner.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
 
@@ -81,6 +87,7 @@ class ResultsActivity : AppCompatActivity() {
     }
 
     private fun showError() {
+        fab.visibility = View.GONE
         spinner.visibility = View.GONE
         recyclerView.visibility = View.GONE
     }
