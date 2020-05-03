@@ -21,13 +21,13 @@ class VenueDetailsActivity : AppCompatActivity() {
         venueItem = intent.getSerializableExtra(KEY_VENUE) as VenueItem
 
         val apiKey = "AIzaSyD-CR-KPPIfRnyU-XQmqkmPGleycM_CydE"
-        val staticMapsUrlBase = "https://maps.googleapis.com/maps/api/staticmap?center=47.6062,-122.3321&size=600x400&maptype=roadmap&markers=color:blue|47.6062,-122.3321&markers=color:red|%.6f,%.6f&key=%s"
-        val staticMapsUrl = staticMapsUrlBase.format(venueItem.latitude, venueItem.longitude, apiKey)
+        val staticMapsUrlBase = "https://maps.googleapis.com/maps/api/staticmap?size=600x400&maptype=roadmap&markers=color:blue|%.6f,%.6f&markers=color:red|%.6f,%.6f&key=%s"
+        val staticMapsUrl = staticMapsUrlBase.format(SEATTLE_LATITUDE, SEATTLE_LONGITUDE, venueItem.latitude, venueItem.longitude, apiKey)
         Picasso.with(this).load(staticMapsUrl).placeholder(R.drawable.mapsstatic_placeholder).into(staticMap)
 
         name.text = venueItem.name
         categories.text = venueItem.categories.joinToString(separator = ",")
-        formattedAddress.text = venueItem.formattedAddress
+        formattedAddress.text = venueItem.formattedAddress.joinToString(separator = "\n")
 
         val distance = distance(SEATTLE_LATITUDE, SEATTLE_LONGITUDE, venueItem.latitude, venueItem.longitude)
         latLong.text = "%.2f".format(distance) + " km"

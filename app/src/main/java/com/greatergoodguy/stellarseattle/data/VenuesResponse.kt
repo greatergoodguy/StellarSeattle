@@ -27,7 +27,7 @@ class VenuesResponse (
                     id = id,
                     name = name,
                     categories = categories.map { it.name },
-                    formattedAddress = if(location.formattedAddress.isNotEmpty()) location.formattedAddress[0] else "",
+                    formattedAddress = location.formattedAddress.map { it },
                     latitude = location.lat,
                     longitude = location.lng,
                     iconUrl = if(categories.isNotEmpty()) categories[0].icon.prefix + "bg_64" + categories[0].icon.suffix else ""

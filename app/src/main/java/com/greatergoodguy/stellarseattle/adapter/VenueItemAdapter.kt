@@ -44,7 +44,7 @@ class VenueItemAdapter(private val context: Context, private val myDataset: List
 
         holder.tvName.text = venueItem.name
         holder.tvCategories.text = venueItem.categories.joinToString(separator = ",")
-        holder.tvFormattedAddress.text = venueItem.formattedAddress
+        holder.tvFormattedAddress.text = if(venueItem.formattedAddress.isNotEmpty()) venueItem.formattedAddress[0] else ""
 
         val distance = distance(SEATTLE_LATITUDE, SEATTLE_LONGITUDE, venueItem.latitude, venueItem.longitude)
         holder.tvLatLong.text = "%.2f".format(distance) + " km"
