@@ -2,15 +2,14 @@ package com.greatergoodguy.stellarseattle.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.greatergoodguy.stellarseattle.R
-import com.greatergoodguy.stellarseattle.adapter.VenueItemAdapter
-import com.greatergoodguy.stellarseattle.domain.VenueItem
+import com.greatergoodguy.stellarseattle.adapter.VenueAdapter
+import com.greatergoodguy.stellarseattle.domain.Venue
 import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import kotlinx.android.synthetic.main.activity_results.*
@@ -24,7 +23,7 @@ class ResultsActivity : AppCompatActivity() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private val items = mutableListOf<VenueItem>()
+    private val venues = mutableListOf<Venue>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,13 +31,13 @@ class ResultsActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
-            intent.putExtra(MapActivity.KEY_VENUEITEMS, ArrayList(items))
+            intent.putExtra(MapActivity.KEY_VENUES, ArrayList(venues))
             startActivity(intent)
         }
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = VenueItemAdapter(baseContext, items, object: VenueItemAdapter.OnItemClickListener {
-            override fun onItemClick(item: VenueItem) {
+        viewAdapter = VenueAdapter(baseContext, venues, object: VenueAdapter.OnItemClickListener {
+            override fun onItemClick(item: Venue) {
                 val intent = Intent(this@ResultsActivity, VenueDetailsActivity::class.java)
                 intent.putExtra(VenueDetailsActivity.KEY_VENUE, item)
                 startActivity(intent)
@@ -67,8 +66,11 @@ class ResultsActivity : AppCompatActivity() {
         recyclerView.visibility = View.GONE
         GlobalScope.launch {
             try {
-                val searchAPI = APIClient.client?.create(FourSquareAPI::class.java)
-                val getVenuesResponse = searchAPI?.getVenues("VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D", "GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ", "Seattle,+WA", searchQuery, "20180401", 20)
+                val fourSquareAPI = APIClient.client?.create(FourSquareAPI::class.java)
+                val clientId = "VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D"
+                val clientSecret = "GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ"
+                val version = "20180401"
+                val getVenuesResponse = fourSquareAPI?.getVenues(clientId, clientSecret, "Seattle,+WA", searchQuery, version, 20)
                 val venueItems = getVenuesResponse?.response?.venues?.map { it.toVenueItem() } ?: listOf()
                 runOnUiThread {
                     updateList(venueItems)
@@ -81,13 +83,13 @@ class ResultsActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateList(venueItems: List<VenueItem>) {
+    private fun updateList(venues: List<Venue>) {
         fab.visibility = View.VISIBLE
         spinner.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
 
-        items.clear()
-        items.addAll(venueItems)
+        this.venues.clear()
+        this.venues.addAll(venues)
         viewAdapter.notifyDataSetChanged()
     }
 

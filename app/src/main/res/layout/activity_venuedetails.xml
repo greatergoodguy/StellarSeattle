@@ -12,17 +12,18 @@
         android:adjustViewBounds="true"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/name"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/keyline_2"
         android:paddingRight="@dimen/keyline_2"
+        android:layout_marginTop="@dimen/keyline_2"
         android:textSize="32sp"
         android:textStyle="bold"
         tools:text="Name"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/categories"
+        android:id="@+id/tvCategories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/keyline_2"
@@ -32,7 +33,7 @@
         tools:text="Categories"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/formattedAddress"
+        android:id="@+id/tvFormattedAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/keyline_2"
@@ -42,7 +43,7 @@
         tools:text="Formatted Address"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/latLong"
+        android:id="@+id/tvLatLong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/keyline_2"
@@ -50,5 +51,33 @@
         android:layout_marginTop="@dimen/keyline_1"
         android:textSize="16sp"
         tools:text="Latitude, Longitude"/>
+
+    <LinearLayout
+        android:id="@+id/websiteUrlContainer"
+        style="@style/Block"
+        android:layout_marginTop="@dimen/keyline_4"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/slate" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvWebsiteUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/keyline_2"
+            android:textSize="20sp"
+            tools:text="Website"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/slate" />
+
+    </LinearLayout>
 
 </LinearLayout>

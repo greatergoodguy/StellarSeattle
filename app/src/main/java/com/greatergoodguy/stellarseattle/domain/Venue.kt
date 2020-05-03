@@ -2,7 +2,7 @@ package com.greatergoodguy.stellarseattle.domain
 
 import java.io.Serializable
 
-class VenueItem (
+class Venue (
     val id: String,
     val name: String,
     val categories: List<String>,

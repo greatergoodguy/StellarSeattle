@@ -2,7 +2,6 @@ package com.greatergoodguy.stellarseattle.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -13,7 +12,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.greatergoodguy.stellarseattle.R
-import com.greatergoodguy.stellarseattle.domain.VenueItem
+import com.greatergoodguy.stellarseattle.domain.Venue
 import com.greatergoodguy.stellarseattle.util.SEATTLE_LATITUDE
 import com.greatergoodguy.stellarseattle.util.SEATTLE_LONGITUDE
 import com.greatergoodguy.stellarseattle.util.toPx
@@ -22,15 +21,15 @@ import kotlinx.android.synthetic.main.activity_map.*
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var items: ArrayList<VenueItem>
-    private var markerVenueMap: HashMap<String, VenueItem> = hashMapOf()
+    private lateinit var venues: ArrayList<Venue>
+    private var markerVenueMap: HashMap<String, Venue> = hashMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        intent.getSerializableExtra(KEY_VENUEITEMS)?.let {
-            items = it as ArrayList<VenueItem>
+        intent.getSerializableExtra(KEY_VENUES)?.let {
+            venues = it as ArrayList<Venue>
         }
 
         mapView.onCreate(savedInstanceState)
@@ -59,11 +58,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             // In each iteration of the loop, we create the venue Marker, add the coordinates
             // to the LatLngBounds Builder (for calculating the size of the map), and add an entry
             // to the Marker - Venue hashmap so we can access the Venue in the InfoWindowClickListener
-            for(item in items) {
-                val markerOption = MarkerOptions().position(LatLng(item.latitude.toDouble(), item.longitude.toDouble())).title(item.name)
+            for(venue in venues) {
+                val markerOption = MarkerOptions().position(LatLng(venue.latitude.toDouble(), venue.longitude.toDouble())).title(venue.name)
                 builder.include(markerOption.position)
                 val marker = map.addMarker(markerOption)
-                markerVenueMap[marker.id] = item
+                markerVenueMap[marker.id] = venue
             }
             val bounds = builder.build()
 
@@ -83,6 +82,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     companion object {
-        const val KEY_VENUEITEMS = "KEY_VENUEITEMS"
+        const val KEY_VENUES = "KEY_VENUES"
     }
 }

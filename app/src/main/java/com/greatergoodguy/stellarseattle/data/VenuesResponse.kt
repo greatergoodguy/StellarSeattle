@@ -1,6 +1,6 @@
 package com.greatergoodguy.stellarseattle.data
 
-import com.greatergoodguy.stellarseattle.domain.VenueItem
+import com.greatergoodguy.stellarseattle.domain.Venue
 
 class VenuesResponse (
     val meta: Meta,
@@ -22,8 +22,8 @@ class VenuesResponse (
             val categories: List<Category>,
             val location: Location
         ) {
-            fun toVenueItem(): VenueItem {
-                return VenueItem(
+            fun toVenueItem(): com.greatergoodguy.stellarseattle.domain.Venue {
+                return Venue(
                     id = id,
                     name = name,
                     categories = categories.map { it.name },

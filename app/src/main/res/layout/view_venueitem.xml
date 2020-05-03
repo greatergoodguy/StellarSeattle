@@ -14,7 +14,7 @@
         android:layout_alignParentEnd="true" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/name"
+        android:id="@+id/tvName"
         style="@style/Wrap"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@id/categoryIcon"
@@ -23,26 +23,26 @@
         tools:text="Name"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/categories"
+        android:id="@+id/tvCategories"
         style="@style/Wrap"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@id/categoryIcon"
-        android:layout_below="@id/name"
+        android:layout_below="@id/tvName"
         tools:text="Categories"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/formattedAddress"
+        android:id="@+id/tvFormattedAddress"
         style="@style/Wrap"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@id/categoryIcon"
-        android:layout_below="@id/categories"
+        android:layout_below="@id/tvCategories"
         tools:text="Formatted Address"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/latLong"
+        android:id="@+id/tvLatLong"
         style="@style/Wrap"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@id/categoryIcon"
-        android:layout_below="@id/formattedAddress"
+        android:layout_below="@id/tvFormattedAddress"
         tools:text="Latitude, Longitude"/>
 </RelativeLayout>
