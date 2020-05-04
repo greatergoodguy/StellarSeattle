@@ -3,6 +3,10 @@ package com.greatergoodguy.stellarseattle.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.BounceInterpolator
+import android.view.animation.ScaleAnimation
+import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.greatergoodguy.stellarseattle.R
@@ -40,6 +44,20 @@ class VenueDetailsActivity : AppCompatActivity() {
 
         val distance = distance(SEATTLE_LATITUDE, SEATTLE_LONGITUDE, venue.latitude, venue.longitude)
         tvLatLong.text = "%.2f".format(distance) + " km"
+
+        val scaleAnimation = ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+        scaleAnimation.duration = 500
+        val bounceInterpolator = BounceInterpolator()
+        scaleAnimation.interpolator = bounceInterpolator
+
+        favoriteButton.setOnCheckedChangeListener(object:View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+            override fun onCheckedChanged(view: CompoundButton?, isChecked: Boolean) {
+                view?.startAnimation(scaleAnimation)
+            }
+
+            override fun onClick(p0: View?) {
+            }
+        });
 
         getVenueDetails(venue.id)
     }

@@ -15,12 +15,13 @@
             android:adjustViewBounds="true"/>
 
         <ToggleButton
-            android:id="@+id/button_favorite"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_margin="@dimen/keyline_2"
+            android:id="@+id/favoriteButton"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:padding="@dimen/keyline_2"
+            android:layout_marginLeft="@dimen/keyline_2"
             android:button="@drawable/button_favorite"
-            android:background="?attr/selectableItemBackground"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:checked="false"
             android:text=""
             android:textOff=""
