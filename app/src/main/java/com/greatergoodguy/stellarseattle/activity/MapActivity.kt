@@ -51,10 +51,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
             //Seattle coordinates
             val seattle = LatLng(SEATTLE_LATITUDE.toDouble(), SEATTLE_LONGITUDE.toDouble())
-            map.addMarker(MarkerOptions().position(seattle).title("Seattle").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+            val seattleMarker = map.addMarker(MarkerOptions().position(seattle).title("Seattle").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
 
             markerVenueMap.clear()
             val builder = LatLngBounds.Builder()
+            builder.include(seattleMarker.position)
             // In each iteration of the loop, we create the venue Marker, add the coordinates
             // to the LatLngBounds Builder (for calculating the size of the map), and add an entry
             // to the Marker - Venue hashmap so we can access the Venue in the InfoWindowClickListener

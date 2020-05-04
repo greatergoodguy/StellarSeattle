@@ -9,6 +9,7 @@
     <color name="slate">#4e5f70</color>
     <color name="pink">#ff69b4</color>
     <color name="light_grey">#d3d3d3</color>
+    <color name="transparent">#00FFFFFF</color>
 
     <color name="button_enabled">#00aac6</color>
     <color name="button_disabled">#6400aac6</color>

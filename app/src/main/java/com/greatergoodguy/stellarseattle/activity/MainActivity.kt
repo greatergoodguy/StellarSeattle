@@ -2,23 +2,29 @@ package com.greatergoodguy.stellarseattle.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.greatergoodguy.stellarseattle.R
+import com.greatergoodguy.stellarseattle.adapter.SearchSuggestionsAdapter
 import com.greatergoodguy.stellarseattle.adapter.VenueAdapter
-import com.greatergoodguy.stellarseattle.domain.Venue
 import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
-import kotlinx.android.synthetic.main.activity_results.*
-import kotlinx.android.synthetic.main.activity_results.fab
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.lang.Exception
+import com.greatergoodguy.stellarseattle.domain.Venue
+import com.greatergoodguy.stellarseattle.util.hideKeyboard
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 
-class ResultsActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private var searchSuggestionJob: Job? = null
+
+    private lateinit var typeAheadAdapter: ArrayAdapter<String>
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -27,7 +33,7 @@ class ResultsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_results)
+        setContentView(R.layout.activity_main)
 
         fab.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
@@ -38,7 +44,7 @@ class ResultsActivity : AppCompatActivity() {
         viewManager = LinearLayoutManager(this)
         viewAdapter = VenueAdapter(baseContext, venues, object: VenueAdapter.OnItemClickListener {
             override fun onItemClick(item: Venue) {
-                val intent = Intent(this@ResultsActivity, VenueDetailsActivity::class.java)
+                val intent = Intent(this@MainActivity, VenueDetailsActivity::class.java)
                 intent.putExtra(VenueDetailsActivity.KEY_VENUE, item)
                 startActivity(intent)
             }
@@ -56,8 +62,24 @@ class ResultsActivity : AppCompatActivity() {
             ))
         }
 
-        var searchQuery: String = intent.getStringExtra(KEY_SEARCHQUERY).orEmpty()
-        getVenueResponses(searchQuery)
+        inputField.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                getSearchSuggestions(s.toString())
+
+            }
+        })
+
+        typeAheadAdapter = SearchSuggestionsAdapter(this, android.R.layout.select_dialog_item, mutableListOf())
+        inputField.threshold = 2
+        inputField.setAdapter(typeAheadAdapter)
+
+        searchButton.setOnClickListener {
+            hideKeyboard()
+            searchSuggestionJob?.cancel()
+            getVenueResponses(inputField.text.toString())
+        }
     }
 
     override fun onResume() {
@@ -71,6 +93,8 @@ class ResultsActivity : AppCompatActivity() {
         fab.visibility = View.GONE
         spinner.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
+        inputField.isEnabled = false
+        searchButton.isEnabled = false
         GlobalScope.launch {
             try {
                 val fourSquareAPI = APIClient.client?.create(FourSquareAPI::class.java)
@@ -94,6 +118,8 @@ class ResultsActivity : AppCompatActivity() {
         fab.visibility = View.VISIBLE
         spinner.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
+        inputField.isEnabled = true
+        searchButton.isEnabled = true
 
         this.venues.clear()
         this.venues.addAll(venues)
@@ -104,6 +130,42 @@ class ResultsActivity : AppCompatActivity() {
         fab.visibility = View.GONE
         spinner.visibility = View.GONE
         recyclerView.visibility = View.GONE
+        inputField.isEnabled = true
+        searchButton.isEnabled = true
+    }
+
+    private fun getSearchSuggestions(query: String) {
+        if(query.trim().length < 2) {
+            updateTypeAheadWords(listOf())
+            return
+        }
+
+        searchSuggestionJob?.cancel()
+        searchSuggestionJob = GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                val searchAPI = APIClient.client?.create(FourSquareAPI::class.java)
+                val getSearchSuggestionsResponse = searchAPI?.getSearchSuggestions(
+                    "VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D",
+                    "GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ",
+                    "Seattle,+WA",
+                    query,
+                    "20180401",
+                    5
+                )
+
+                val newTypeAheadWords =
+                    getSearchSuggestionsResponse?.response?.minivenues?.map { it.name } ?: listOf()
+                runOnUiThread {
+                    updateTypeAheadWords(newTypeAheadWords)
+                }
+            }
+        }
+    }
+
+    private fun updateTypeAheadWords(newTypeAheadWords: List<String>) {
+        typeAheadAdapter.clear()
+        typeAheadAdapter.addAll(newTypeAheadWords)
+        typeAheadAdapter.notifyDataSetChanged()
     }
 
     companion object {
