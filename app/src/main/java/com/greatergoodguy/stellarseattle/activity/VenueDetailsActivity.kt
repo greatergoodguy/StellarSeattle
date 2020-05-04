@@ -1,27 +1,25 @@
 package com.greatergoodguy.stellarseattle.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
 import android.view.animation.ScaleAnimation
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import com.greatergoodguy.stellarseattle.domain.Venue
 import com.greatergoodguy.stellarseattle.domain.VenueDetails
+import com.greatergoodguy.stellarseattle.storage.addFavoriteVenue
+import com.greatergoodguy.stellarseattle.storage.isFavoriteVenue
+import com.greatergoodguy.stellarseattle.storage.removeFavoriteVenue
 import com.greatergoodguy.stellarseattle.util.*
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_results.*
 import kotlinx.android.synthetic.main.activity_venuedetails.*
-import kotlinx.android.synthetic.main.activity_venuedetails.spinner
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class VenueDetailsActivity : AppCompatActivity() {
 
@@ -32,6 +30,10 @@ class VenueDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_venuedetails)
 
         venue = intent.getSerializableExtra(KEY_VENUE) as Venue
+
+        if(venue == null) {
+            return
+        }
 
         val apiKey = "AIzaSyD-CR-KPPIfRnyU-XQmqkmPGleycM_CydE"
         val staticMapsUrlBase = "https://maps.googleapis.com/maps/api/staticmap?size=600x400&maptype=roadmap&markers=color:blue|%.6f,%.6f&markers=color:red|%.6f,%.6f&key=%s"
@@ -50,9 +52,15 @@ class VenueDetailsActivity : AppCompatActivity() {
         val bounceInterpolator = BounceInterpolator()
         scaleAnimation.interpolator = bounceInterpolator
 
+        favoriteButton.isChecked = isFavoriteVenue(this, venue.id)
         favoriteButton.setOnCheckedChangeListener(object:View.OnClickListener, CompoundButton.OnCheckedChangeListener {
             override fun onCheckedChanged(view: CompoundButton?, isChecked: Boolean) {
                 view?.startAnimation(scaleAnimation)
+                if(isChecked) {
+                    addFavoriteVenue(this@VenueDetailsActivity, venue.id)
+                } else {
+                    removeFavoriteVenue(this@VenueDetailsActivity, venue.id)
+                }
             }
 
             override fun onClick(p0: View?) {

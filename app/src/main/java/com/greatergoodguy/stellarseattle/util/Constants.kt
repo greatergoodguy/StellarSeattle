@@ -6,5 +6,3 @@ val FOURSQUAREAPI_VERSION = "20180401"
 
 val SEATTLE_LATITUDE = 47.6062095F
 val SEATTLE_LONGITUDE = -122.3320708F
-
-val favoritedVenueIds = mutableSetOf<String>()
