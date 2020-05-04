@@ -60,6 +60,13 @@ class ResultsActivity : AppCompatActivity() {
         getVenueResponses(searchQuery)
     }
 
+    override fun onResume() {
+        super.onResume()
+        // This will refresh the list to show the favorite icon, in case this field was
+        // updated in the VenueDetailsActivity
+        viewAdapter.notifyDataSetChanged()
+    }
+
     private fun getVenueResponses(searchQuery: String) {
         fab.visibility = View.GONE
         spinner.visibility = View.VISIBLE

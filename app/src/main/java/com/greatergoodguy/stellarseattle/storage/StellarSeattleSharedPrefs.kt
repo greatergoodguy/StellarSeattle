@@ -10,9 +10,20 @@ private object Key {
     const val FAVORITE_VENUE_IDS = "FAVORITE_VENUE_IDS"
 }
 
-private fun getFavoriteVenueIds(context: Context): MutableSet<String> {
+/*
+    According to the documentation for prefs.getStringSet:
+
+    Note that you must not modify the set instance returned by this call.
+    The consistency of the stored data is not guaranteed if you do,
+    nor is your ability to modify the instance at all.
+
+    This is why I am transforming this set to another MutableSet
+
+    https://stackoverflow.com/questions/10720028/android-sharedpreferences-not-saving
+ */
+fun getFavoriteVenueIds(context: Context): MutableSet<String> {
     val prefs: SharedPreferences = context.getSharedPreferences(Key.STELLAR_SEATTLE_SHARED_PREFS, MODE_PRIVATE)
-    return prefs.getStringSet(Key.FAVORITE_VENUE_IDS, mutableSetOf()) ?: mutableSetOf()
+    return (prefs.getStringSet(Key.FAVORITE_VENUE_IDS, mutableSetOf()) ?: mutableSetOf()).toMutableSet()
 }
 
 fun isFavoriteVenue(context: Context, venueId: String):Boolean {

@@ -2,6 +2,7 @@ package com.greatergoodguy.stellarseattle.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.domain.Venue
+import com.greatergoodguy.stellarseattle.storage.isFavoriteVenue
 import com.greatergoodguy.stellarseattle.util.SEATTLE_LATITUDE
 import com.greatergoodguy.stellarseattle.util.SEATTLE_LONGITUDE
 import com.greatergoodguy.stellarseattle.util.distance
@@ -22,7 +24,8 @@ class VenueAdapter(private val context: Context, private val myDataset: List<Ven
         val tvCategories: TextView,
         val tvFormattedAddress: TextView,
         val tvLatLong: TextView,
-        val ivIcon: ImageView
+        val ivCategoryIcon: ImageView,
+        val ivFavoriteIcon: ImageView
     ) : RecyclerView.ViewHolder(container)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,8 +34,9 @@ class VenueAdapter(private val context: Context, private val myDataset: List<Ven
         val tvCategories  = container.findViewById<TextView>(R.id.tvCategories)
         val tvFormattedAddress = container.findViewById<TextView>(R.id.tvFormattedAddress)
         val tvLatLong = container.findViewById<TextView>(R.id.tvLatLong)
-        val ivIcon = container.findViewById<ImageView>(R.id.categoryIcon)
-        return ViewHolder(container, tvName, tvCategories, tvFormattedAddress, tvLatLong, ivIcon)
+        val ivCategoryIcon = container.findViewById<ImageView>(R.id.categoryIcon)
+        val ivFavoriteIcon = container.findViewById<ImageView>(R.id.favoriteIcon)
+        return ViewHolder(container, tvName, tvCategories, tvFormattedAddress, tvLatLong, ivCategoryIcon, ivFavoriteIcon)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -45,10 +49,16 @@ class VenueAdapter(private val context: Context, private val myDataset: List<Ven
         val distance = distance(SEATTLE_LATITUDE, SEATTLE_LONGITUDE, venue.latitude, venue.longitude)
         holder.tvLatLong.text = "%.2f".format(distance) + " km"
 
-        Picasso.with(context).load(venue.iconUrl).into(holder.ivIcon)
+        Picasso.with(context).load(venue.iconUrl).into(holder.ivCategoryIcon)
 
         holder.itemView.setOnClickListener {
             itemClickListener.onItemClick(venue)
+        }
+
+        if(isFavoriteVenue(context, venue.id)) {
+            holder.ivFavoriteIcon.visibility = View.VISIBLE
+        } else {
+            holder.ivFavoriteIcon.visibility = View.GONE
         }
     }
 

@@ -1,6 +1,7 @@
 package com.greatergoodguy.stellarseattle.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
@@ -13,6 +14,7 @@ import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import com.greatergoodguy.stellarseattle.domain.Venue
 import com.greatergoodguy.stellarseattle.domain.VenueDetails
 import com.greatergoodguy.stellarseattle.storage.addFavoriteVenue
+import com.greatergoodguy.stellarseattle.storage.getFavoriteVenueIds
 import com.greatergoodguy.stellarseattle.storage.isFavoriteVenue
 import com.greatergoodguy.stellarseattle.storage.removeFavoriteVenue
 import com.greatergoodguy.stellarseattle.util.*
@@ -52,6 +54,7 @@ class VenueDetailsActivity : AppCompatActivity() {
         val bounceInterpolator = BounceInterpolator()
         scaleAnimation.interpolator = bounceInterpolator
 
+        Log.d("VenueDetailsActivity", getFavoriteVenueIds(this).toString())
         favoriteButton.isChecked = isFavoriteVenue(this, venue.id)
         favoriteButton.setOnCheckedChangeListener(object:View.OnClickListener, CompoundButton.OnCheckedChangeListener {
             override fun onCheckedChanged(view: CompoundButton?, isChecked: Boolean) {
@@ -84,6 +87,9 @@ class VenueDetailsActivity : AppCompatActivity() {
                     }
                 }
             } catch (e: Exception) {
+                runOnUiThread {
+                    spinner.visibility = View.GONE
+                }
             }
         }
     }
