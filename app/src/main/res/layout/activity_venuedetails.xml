@@ -20,7 +20,7 @@
         android:layout_marginTop="@dimen/keyline_2"
         android:textSize="32sp"
         android:textStyle="bold"
-        tools:text="Name"/>
+        tools:text="Name" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvCategories"
@@ -52,32 +52,64 @@
         android:textSize="16sp"
         tools:text="Latitude, Longitude"/>
 
-    <LinearLayout
-        android:id="@+id/websiteUrlContainer"
+    <RelativeLayout
         style="@style/Block"
-        android:layout_marginTop="@dimen/keyline_4"
-        android:orientation="vertical"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackground">
+        android:layout_marginTop="@dimen/keyline_2">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/slate" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvWebsiteUrl"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/keyline_2"
-            android:textSize="20sp"
-            tools:text="Website"/>
+            android:layout_centerInParent="true"
+            app:lottie_rawRes="@raw/location_loader"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"
+            android:visibility="gone"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/slate" />
+        <LinearLayout
+            android:id="@+id/detailsContainer"
+            style="@style/Block"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/keyline_2"
+                android:paddingRight="@dimen/keyline_2"
+                android:textSize="16sp"
+                tools:text="Description"/>
+
+            <LinearLayout
+                android:id="@+id/websiteUrlContainer"
+                style="@style/Block"
+                android:layout_marginTop="@dimen/keyline_4"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_grey" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvWebsiteUrl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/keyline_2"
+                    android:textSize="20sp"
+                    tools:text="Website"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_grey" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

@@ -70,8 +70,8 @@ class ResultsActivity : AppCompatActivity() {
                 val clientId = "VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D"
                 val clientSecret = "GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ"
                 val version = "20180401"
-                val getVenuesResponse = fourSquareAPI?.getVenues(clientId, clientSecret, "Seattle,+WA", searchQuery, version, 20)
-                val venueItems = getVenuesResponse?.response?.venues?.map { it.toVenueItem() } ?: listOf()
+                val venuesResponse = fourSquareAPI?.getVenues(clientId, clientSecret, "Seattle,+WA", searchQuery, version, 20)
+                val venueItems = venuesResponse?.response?.venues?.map { it.toVenueItem() } ?: listOf()
                 runOnUiThread {
                     updateList(venueItems)
                 }

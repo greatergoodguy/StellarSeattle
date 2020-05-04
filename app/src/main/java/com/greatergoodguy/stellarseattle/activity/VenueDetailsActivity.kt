@@ -2,16 +2,19 @@ package com.greatergoodguy.stellarseattle.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import com.greatergoodguy.stellarseattle.domain.Venue
-import com.greatergoodguy.stellarseattle.util.SEATTLE_LATITUDE
-import com.greatergoodguy.stellarseattle.util.SEATTLE_LONGITUDE
-import com.greatergoodguy.stellarseattle.util.distance
+import com.greatergoodguy.stellarseattle.domain.VenueDetails
+import com.greatergoodguy.stellarseattle.util.*
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_results.*
 import kotlinx.android.synthetic.main.activity_venuedetails.*
+import kotlinx.android.synthetic.main.activity_venuedetails.spinner
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -42,15 +45,37 @@ class VenueDetailsActivity : AppCompatActivity() {
     }
 
     private fun getVenueDetails(venueId: String) {
+        spinner.visibility = View.VISIBLE
+        detailsContainer.visibility = View.GONE
         GlobalScope.launch {
             try {
                 val fourSquareAPI = APIClient.client?.create(FourSquareAPI::class.java)
-                val clientId = "VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D"
-                val clientSecret = "GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ"
-                val version = "20180401"
-                val getVenuesResponse = fourSquareAPI?.getVenueDetails(venueId, clientId, clientSecret, version)
+                val venueDetailsResponse = fourSquareAPI?.getVenueDetails(venueId, FOURSQUAREAPI_CLIENT_ID, FOURSQUAREAPI_CLIENT_SECRET, FOURSQUAREAPI_VERSION)
+                venueDetailsResponse?.response?.venue?.let {
+                    val venueDetails = it.toVenueDetails()
+                    runOnUiThread {
+                        updateUI(venueDetails)
+                    }
+                }
             } catch (e: Exception) {
             }
+        }
+    }
+
+    private fun updateUI(venueDetails: VenueDetails) {
+        spinner.visibility = View.GONE
+        detailsContainer.visibility = View.VISIBLE
+
+        tvDescription.text = venueDetails.description
+
+        venueDetails.url?.let { websiteUrl ->
+            websiteUrlContainer.visibility = View.VISIBLE
+            tvWebsiteUrl.text = websiteUrl
+            websiteUrlContainer.setOnClickListener {
+                showExternalBrowser(this@VenueDetailsActivity, websiteUrl)
+            }
+        } ?: run {
+            websiteUrlContainer.visibility = View.GONE
         }
     }
 
