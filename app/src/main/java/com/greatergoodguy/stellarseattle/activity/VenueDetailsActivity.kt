@@ -8,6 +8,7 @@ import android.view.animation.BounceInterpolator
 import android.view.animation.ScaleAnimation
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
+import com.greatergoodguy.stellarseattle.BuildConfig
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
@@ -37,9 +38,8 @@ class VenueDetailsActivity : AppCompatActivity() {
             return
         }
 
-        val apiKey = "AIzaSyD-CR-KPPIfRnyU-XQmqkmPGleycM_CydE"
         val staticMapsUrlBase = "https://maps.googleapis.com/maps/api/staticmap?size=600x400&maptype=roadmap&markers=color:blue|%.6f,%.6f&markers=color:red|%.6f,%.6f&key=%s"
-        val staticMapsUrl = staticMapsUrlBase.format(SEATTLE_LATITUDE, SEATTLE_LONGITUDE, venue.latitude, venue.longitude, apiKey)
+        val staticMapsUrl = staticMapsUrlBase.format(SEATTLE_LATITUDE, SEATTLE_LONGITUDE, venue.latitude, venue.longitude, BuildConfig.GoogleApiKey)
         Picasso.with(this).load(staticMapsUrl).placeholder(R.drawable.mapsstatic_placeholder).into(staticMap)
 
         tvName.text = venue.name
@@ -79,7 +79,7 @@ class VenueDetailsActivity : AppCompatActivity() {
         GlobalScope.launch {
             try {
                 val fourSquareAPI = APIClient.client?.create(FourSquareAPI::class.java)
-                val venueDetailsResponse = fourSquareAPI?.getVenueDetails(venueId, FOURSQUAREAPI_CLIENT_ID, FOURSQUAREAPI_CLIENT_SECRET, FOURSQUAREAPI_VERSION)
+                val venueDetailsResponse = fourSquareAPI?.getVenueDetails(venueId, BuildConfig.FoursquareClientId, BuildConfig.FoursquareClientSecret, BuildConfig.FoursquareVersion)
                 venueDetailsResponse?.response?.venue?.let {
                     val venueDetails = it.toVenueDetails()
                     runOnUiThread {

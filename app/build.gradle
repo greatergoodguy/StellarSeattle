@@ -17,6 +17,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField 'String', 'FoursquareClientId', '\"VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D\"'
+            buildConfigField 'String', 'FoursquareClientSecret', '\"GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ\"'
+            buildConfigField 'String', 'FoursquareVersion', '\"20180401\"'
+            buildConfigField 'String', 'GoogleApiKey', '\"AIzaSyD-CR-KPPIfRnyU-XQmqkmPGleycM_CydE\"'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

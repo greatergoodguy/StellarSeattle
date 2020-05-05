@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.greatergoodguy.stellarseattle.BuildConfig
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.adapter.SearchSuggestionsAdapter
 import com.greatergoodguy.stellarseattle.adapter.VenueAdapter
@@ -98,10 +99,7 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch {
             try {
                 val fourSquareAPI = APIClient.client?.create(FourSquareAPI::class.java)
-                val clientId = "VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D"
-                val clientSecret = "GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ"
-                val version = "20180401"
-                val venuesResponse = fourSquareAPI?.getVenues(clientId, clientSecret, "Seattle,+WA", searchQuery, version, 20)
+                val venuesResponse = fourSquareAPI?.getVenues(BuildConfig.FoursquareClientId, BuildConfig.FoursquareClientSecret, "Seattle,+WA", searchQuery, BuildConfig.FoursquareVersion, 20)
                 val venueItems = venuesResponse?.response?.venues?.map { it.toVenueItem() } ?: listOf()
                 runOnUiThread {
                     updateList(venueItems)
@@ -145,11 +143,11 @@ class MainActivity : AppCompatActivity() {
             withContext(Dispatchers.IO) {
                 val searchAPI = APIClient.client?.create(FourSquareAPI::class.java)
                 val getSearchSuggestionsResponse = searchAPI?.getSearchSuggestions(
-                    "VM1IINUCXSHQJRSBJPIQWBJKCVAV4YUQQ31VWHYQRITLPY0D",
-                    "GUJPBGJMVTQWEPNRU5V0WISFH11LCU1WDSVS2JBN3W5SE1GJ",
+                    BuildConfig.FoursquareClientId,
+                    BuildConfig.FoursquareClientSecret,
                     "Seattle,+WA",
                     query,
-                    "20180401",
+                    BuildConfig.FoursquareVersion,
                     5
                 )
 
