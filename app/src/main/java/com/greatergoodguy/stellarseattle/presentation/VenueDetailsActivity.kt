@@ -1,4 +1,4 @@
-package com.greatergoodguy.stellarseattle.activity
+package com.greatergoodguy.stellarseattle.presentation
 
 import android.os.Bundle
 import android.view.View
@@ -40,10 +40,6 @@ class VenueDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_venuedetails)
 
         venue = intent.getSerializableExtra(KEY_VENUE) as Venue
-
-        if(venue == null) {
-            return
-        }
 
         val staticMapsUrlBase = "https://maps.googleapis.com/maps/api/staticmap?size=600x400&maptype=roadmap&markers=color:blue|%.6f,%.6f&markers=color:red|%.6f,%.6f&key=%s"
         val staticMapsUrl = staticMapsUrlBase.format(SEATTLE_LATITUDE, SEATTLE_LONGITUDE, venue.latitude, venue.longitude, BuildConfig.GoogleApiKey)

@@ -1,6 +1,7 @@
 package com.greatergoodguy.stellarseattle
 
 import android.app.Application
+import com.greatergoodguy.stellarseattle.di.DaggerAppComponent
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
