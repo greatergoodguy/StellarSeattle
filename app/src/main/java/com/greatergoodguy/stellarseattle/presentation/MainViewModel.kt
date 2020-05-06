@@ -2,38 +2,71 @@ package com.greatergoodguy.stellarseattle.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.greatergoodguy.stellarseattle.BuildConfig
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import com.greatergoodguy.stellarseattle.domain.Venue
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     private val fourSquareAPI: FourSquareAPI
 ): ViewModel() {
 
-    val searchQuery = MutableLiveData<String>()
-    val venues = MutableLiveData<List<Venue>>()
+    val searchQuery = MutableLiveData<String>().apply  { value = "" }
+    val venues= MutableLiveData<List<Venue>>().apply { value = listOf() }
 
-    val showFab             = MutableLiveData<Boolean>().apply { value = true }
-    val showSpinner         = MutableLiveData<Boolean>().apply { value = true }
-    val showRecyclerView    = MutableLiveData<Boolean>().apply { value = false }
-    val inputFieldEnabled   = MutableLiveData<Boolean>().apply { value = false }
-    val searchButtonEnabled = MutableLiveData<Boolean>().apply { value = false }
+    val typeAheadWords = MutableLiveData<List<String>>().apply { value = listOf() }
 
-//    fun getVenues(searchQuery: String) {
-//        viewModelScope.launch {
-//            try {
-//                val venuesResponse = fourSquareAPI.getVenues(
-//                    BuildConfig.FoursquareClientId,
-//                    BuildConfig.FoursquareClientSecret,
-//                    "Seattle,+WA",
-//                    searchQuery,
-//                    BuildConfig.FoursquareVersion,
-//                    20
-//                )
-//                val venueItems = venuesResponse.response.venues.map { it.toVenueItem() }
-//            } catch(e: Exception) {
-//
-//            }
-//        }
-//    }
+    val isSearchApiRunning = MutableLiveData<Boolean>().apply { value = false }
+    val isSearchApiSuccessful = MutableLiveData<Boolean>().apply { value = false }
+
+    private var searchSuggestionJob: Job? = null
+
+    fun onSearch(searchQuery: String) {
+        viewModelScope.launch {
+            searchSuggestionJob?.cancel()
+            isSearchApiRunning.postValue(true)
+            try {
+                val venuesResponse = fourSquareAPI.getVenues(
+                    BuildConfig.FoursquareClientId,
+                    BuildConfig.FoursquareClientSecret,
+                    "Seattle,+WA",
+                    searchQuery,
+                    BuildConfig.FoursquareVersion,
+                    20
+                )
+                val result = venuesResponse.response.venues.map { it.toVenueItem() }
+                venues.postValue(result)
+                isSearchApiSuccessful.postValue(true)
+            } catch(e: Exception) {
+                isSearchApiSuccessful.postValue(false)
+            }
+            isSearchApiRunning.postValue(false)
+        }
+    }
+
+
+    fun getSearchSuggestions(query: String) {
+        if(query.trim().length < 2) {
+            typeAheadWords.postValue(listOf())
+            return
+        }
+        searchSuggestionJob?.cancel()
+        searchSuggestionJob = viewModelScope.launch {
+            try {
+                val getSearchSuggestionsResponse = fourSquareAPI.getSearchSuggestions(
+                    BuildConfig.FoursquareClientId,
+                    BuildConfig.FoursquareClientSecret,
+                    "Seattle,+WA",
+                    query,
+                    BuildConfig.FoursquareVersion,
+                    5
+                )
+
+                val result = getSearchSuggestionsResponse.response.minivenues.map { it.name }
+                typeAheadWords.postValue(result)
+            } catch(e: Exception) {}
+        }
+    }
 }

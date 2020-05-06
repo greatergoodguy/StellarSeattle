@@ -43,7 +43,9 @@
                             android:hint="Search Query"
                             android:inputType="textAutoComplete"
                             android:maxLines="1"
-                            android:imeOptions="actionDone"/>
+                            android:imeOptions="actionDone"
+                            android:text="@={viewModel.searchQuery}"
+                            android:enabled="@{!viewModel.isSearchApiRunning}"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -51,7 +53,9 @@
                         style="@style/Button"
                         android:layout_marginTop="@dimen/keyline_1"
                         android:text="Search"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:onClick="@{() -> viewModel.onSearch(viewModel.searchQuery)}"
+                        android:enabled="@{!viewModel.isSearchApiRunning}"/>
 
                 </LinearLayout>
 
@@ -67,7 +71,7 @@
                 android:scrollbars="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"/>
+                showIf="@{!viewModel.isSearchApiRunning &amp;&amp; viewModel.isSearchApiSuccessful}"/>
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/spinner"
@@ -78,7 +82,7 @@
                 app:lottie_rawRes="@raw/location_loader"
                 app:lottie_loop="true"
                 app:lottie_autoPlay="true"
-                android:visibility="gone"/>
+                showIf="@{viewModel.isSearchApiRunning}"/>
 
         </RelativeLayout>
 
@@ -92,7 +96,7 @@
             app:tint="@color/white"
             app:backgroundTint="@color/colorAccent"
             app:srcCompat="@android:drawable/ic_dialog_map"
-            app:showIf="@{viewModel.showFab}"/>
+            showIf="@{!viewModel.isSearchApiRunning &amp;&amp; viewModel.isSearchApiSuccessful}"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

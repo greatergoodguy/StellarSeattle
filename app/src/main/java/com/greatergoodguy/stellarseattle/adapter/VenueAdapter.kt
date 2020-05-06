@@ -20,9 +20,10 @@ import javax.inject.Inject
 class VenueAdapter(
     private val context: Context,
     private val storage: SharedPrefsStorage,
-    private val myDataset: List<Venue>,
     private val itemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<VenueAdapter.ViewHolder>() {
+
+    private val venues: MutableList<Venue> = mutableListOf()
 
     class ViewHolder(
         container: ViewGroup,
@@ -46,7 +47,7 @@ class VenueAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val venue = myDataset[position]
+        val venue = venues[position]
 
         holder.tvName.text = venue.name
         holder.tvCategories.text = venue.categories.joinToString(separator = ",")
@@ -68,7 +69,12 @@ class VenueAdapter(
         }
     }
 
-    override fun getItemCount() = myDataset.size
+    override fun getItemCount() = venues.size
+
+    fun setData(newVenues: List<Venue>) {
+        venues.clear()
+        venues.addAll(newVenues)
+    }
 
     interface OnItemClickListener {
         fun onItemClick(item: Venue)

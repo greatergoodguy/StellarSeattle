@@ -10,6 +10,12 @@ import dagger.multibindings.IntoMap
 @Module
 internal abstract class PresentationModule {
 
+    @ContributesAndroidInjector
+    abstract fun provideInjectorVenueDetailsActivity(): VenueDetailsActivity
+
+    @ContributesAndroidInjector
+    abstract fun provideInjectorMapActivity(): MapActivity
+
     @Scope
     @ContributesAndroidInjector
     abstract fun provideInjectorMainActivity(): MainActivity
