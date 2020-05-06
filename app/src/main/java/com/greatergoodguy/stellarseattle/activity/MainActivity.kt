@@ -17,11 +17,17 @@ import com.greatergoodguy.stellarseattle.adapter.VenueAdapter
 import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import com.greatergoodguy.stellarseattle.domain.Venue
+import com.greatergoodguy.stellarseattle.storage.SharedPrefsStorage
 import com.greatergoodguy.stellarseattle.util.hideKeyboard
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var storage: SharedPrefsStorage
 
     private var searchSuggestionJob: Job? = null
 
@@ -33,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private val venues = mutableListOf<Venue>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -43,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = VenueAdapter(baseContext, venues, object: VenueAdapter.OnItemClickListener {
+        viewAdapter = VenueAdapter(baseContext, storage, venues, object: VenueAdapter.OnItemClickListener {
             override fun onItemClick(item: Venue) {
                 val intent = Intent(this@MainActivity, VenueDetailsActivity::class.java)
                 intent.putExtra(VenueDetailsActivity.KEY_VENUE, item)

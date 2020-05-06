@@ -10,13 +10,19 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.domain.Venue
-import com.greatergoodguy.stellarseattle.storage.isFavoriteVenue
+import com.greatergoodguy.stellarseattle.storage.SharedPrefsStorage
 import com.greatergoodguy.stellarseattle.util.SEATTLE_LATITUDE
 import com.greatergoodguy.stellarseattle.util.SEATTLE_LONGITUDE
 import com.greatergoodguy.stellarseattle.util.distance
 import com.squareup.picasso.Picasso
+import javax.inject.Inject
 
-class VenueAdapter(private val context: Context, private val myDataset: List<Venue>, val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<VenueAdapter.ViewHolder>() {
+class VenueAdapter(
+    private val context: Context,
+    private val storage: SharedPrefsStorage,
+    private val myDataset: List<Venue>,
+    private val itemClickListener: OnItemClickListener
+) : RecyclerView.Adapter<VenueAdapter.ViewHolder>() {
 
     class ViewHolder(
         container: ViewGroup,
@@ -55,7 +61,7 @@ class VenueAdapter(private val context: Context, private val myDataset: List<Ven
             itemClickListener.onItemClick(venue)
         }
 
-        if(isFavoriteVenue(context, venue.id)) {
+        if(storage.isFavoriteVenue(context, venue.id)) {
             holder.ivFavoriteIcon.visibility = View.VISIBLE
         } else {
             holder.ivFavoriteIcon.visibility = View.GONE

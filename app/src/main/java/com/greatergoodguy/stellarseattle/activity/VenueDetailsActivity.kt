@@ -1,7 +1,6 @@
 package com.greatergoodguy.stellarseattle.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
@@ -14,21 +13,27 @@ import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import com.greatergoodguy.stellarseattle.domain.Venue
 import com.greatergoodguy.stellarseattle.domain.VenueDetails
-import com.greatergoodguy.stellarseattle.storage.addFavoriteVenue
-import com.greatergoodguy.stellarseattle.storage.getFavoriteVenueIds
-import com.greatergoodguy.stellarseattle.storage.isFavoriteVenue
-import com.greatergoodguy.stellarseattle.storage.removeFavoriteVenue
-import com.greatergoodguy.stellarseattle.util.*
+import com.greatergoodguy.stellarseattle.storage.SharedPrefsStorage
+import com.greatergoodguy.stellarseattle.util.SEATTLE_LATITUDE
+import com.greatergoodguy.stellarseattle.util.SEATTLE_LONGITUDE
+import com.greatergoodguy.stellarseattle.util.distance
+import com.greatergoodguy.stellarseattle.util.showExternalBrowser
 import com.squareup.picasso.Picasso
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_venuedetails.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class VenueDetailsActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var storage: SharedPrefsStorage
 
     private lateinit var venue: Venue
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_venuedetails)
 
@@ -54,15 +59,14 @@ class VenueDetailsActivity : AppCompatActivity() {
         val bounceInterpolator = BounceInterpolator()
         scaleAnimation.interpolator = bounceInterpolator
 
-        Log.d("VenueDetailsActivity", getFavoriteVenueIds(this).toString())
-        favoriteButton.isChecked = isFavoriteVenue(this, venue.id)
+        favoriteButton.isChecked = storage.isFavoriteVenue(this, venue.id)
         favoriteButton.setOnCheckedChangeListener(object:View.OnClickListener, CompoundButton.OnCheckedChangeListener {
             override fun onCheckedChanged(view: CompoundButton?, isChecked: Boolean) {
                 view?.startAnimation(scaleAnimation)
                 if(isChecked) {
-                    addFavoriteVenue(this@VenueDetailsActivity, venue.id)
+                    storage.addFavoriteVenue(this@VenueDetailsActivity, venue.id)
                 } else {
-                    removeFavoriteVenue(this@VenueDetailsActivity, venue.id)
+                    storage.removeFavoriteVenue(this@VenueDetailsActivity, venue.id)
                 }
             }
 
