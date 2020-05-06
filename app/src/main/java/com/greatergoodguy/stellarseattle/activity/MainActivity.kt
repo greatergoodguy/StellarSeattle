@@ -14,7 +14,6 @@ import com.greatergoodguy.stellarseattle.BuildConfig
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.adapter.SearchSuggestionsAdapter
 import com.greatergoodguy.stellarseattle.adapter.VenueAdapter
-import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import com.greatergoodguy.stellarseattle.domain.Venue
 import com.greatergoodguy.stellarseattle.storage.SharedPrefsStorage
@@ -28,6 +27,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var storage: SharedPrefsStorage
+
+    @Inject
+    lateinit var fourSquareAPI: FourSquareAPI
 
     private var searchSuggestionJob: Job? = null
 
@@ -105,9 +107,8 @@ class MainActivity : AppCompatActivity() {
         searchButton.isEnabled = false
         GlobalScope.launch {
             try {
-                val fourSquareAPI = APIClient.client?.create(FourSquareAPI::class.java)
-                val venuesResponse = fourSquareAPI?.getVenues(BuildConfig.FoursquareClientId, BuildConfig.FoursquareClientSecret, "Seattle,+WA", searchQuery, BuildConfig.FoursquareVersion, 20)
-                val venueItems = venuesResponse?.response?.venues?.map { it.toVenueItem() } ?: listOf()
+                val venuesResponse = fourSquareAPI.getVenues(BuildConfig.FoursquareClientId, BuildConfig.FoursquareClientSecret, "Seattle,+WA", searchQuery, BuildConfig.FoursquareVersion, 20)
+                val venueItems = venuesResponse.response.venues.map { it.toVenueItem() }
                 runOnUiThread {
                     updateList(venueItems)
                 }
@@ -148,8 +149,7 @@ class MainActivity : AppCompatActivity() {
         searchSuggestionJob?.cancel()
         searchSuggestionJob = GlobalScope.launch {
             withContext(Dispatchers.IO) {
-                val searchAPI = APIClient.client?.create(FourSquareAPI::class.java)
-                val getSearchSuggestionsResponse = searchAPI?.getSearchSuggestions(
+                val getSearchSuggestionsResponse = fourSquareAPI.getSearchSuggestions(
                     BuildConfig.FoursquareClientId,
                     BuildConfig.FoursquareClientSecret,
                     "Seattle,+WA",
@@ -158,8 +158,7 @@ class MainActivity : AppCompatActivity() {
                     5
                 )
 
-                val newTypeAheadWords =
-                    getSearchSuggestionsResponse?.response?.minivenues?.map { it.name } ?: listOf()
+                val newTypeAheadWords = getSearchSuggestionsResponse.response.minivenues.map { it.name }
                 runOnUiThread {
                     updateTypeAheadWords(newTypeAheadWords)
                 }
@@ -171,9 +170,5 @@ class MainActivity : AppCompatActivity() {
         typeAheadAdapter.clear()
         typeAheadAdapter.addAll(newTypeAheadWords)
         typeAheadAdapter.notifyDataSetChanged()
-    }
-
-    companion object {
-        const val KEY_SEARCHQUERY = "KEY_SEARCHQUERY"
     }
 }

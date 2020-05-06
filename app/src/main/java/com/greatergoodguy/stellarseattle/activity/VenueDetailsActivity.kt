@@ -9,7 +9,6 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import com.greatergoodguy.stellarseattle.BuildConfig
 import com.greatergoodguy.stellarseattle.R
-import com.greatergoodguy.stellarseattle.api.APIClient
 import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import com.greatergoodguy.stellarseattle.domain.Venue
 import com.greatergoodguy.stellarseattle.domain.VenueDetails
@@ -29,6 +28,9 @@ class VenueDetailsActivity : AppCompatActivity() {
 
     @Inject
     lateinit var storage: SharedPrefsStorage
+
+    @Inject
+    lateinit var fourSquareAPI: FourSquareAPI
 
     private lateinit var venue: Venue
 
@@ -82,9 +84,8 @@ class VenueDetailsActivity : AppCompatActivity() {
         detailsContainer.visibility = View.GONE
         GlobalScope.launch {
             try {
-                val fourSquareAPI = APIClient.client?.create(FourSquareAPI::class.java)
-                val venueDetailsResponse = fourSquareAPI?.getVenueDetails(venueId, BuildConfig.FoursquareClientId, BuildConfig.FoursquareClientSecret, BuildConfig.FoursquareVersion)
-                venueDetailsResponse?.response?.venue?.let {
+                val venueDetailsResponse = fourSquareAPI.getVenueDetails(venueId, BuildConfig.FoursquareClientId, BuildConfig.FoursquareClientSecret, BuildConfig.FoursquareVersion)
+                venueDetailsResponse.response.venue.let {
                     val venueDetails = it.toVenueDetails()
                     runOnUiThread {
                         updateUI(venueDetails)
