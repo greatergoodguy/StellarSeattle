@@ -33,9 +33,6 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels { viewModelFactory }
 
     @Inject
-    lateinit var fourSquareAPI: FourSquareAPI
-
-    @Inject
     lateinit var storage: SharedPrefsStorage
 
     private lateinit var binding: ActivityMainBinding
@@ -82,18 +79,19 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        typeAheadAdapter = SearchSuggestionsAdapter(this, android.R.layout.select_dialog_item, mutableListOf())
+        inputField.threshold = 2
+        inputField.setAdapter(typeAheadAdapter)
+
         viewModel.venues.observe(this, Observer {
             viewAdapter.setData(it)
             viewAdapter.notifyDataSetChanged()
+            inputField.dismissDropDown()
         })
 
         viewModel.searchQuery.observe(this, Observer {
             viewModel.getSearchSuggestions(it)
         })
-
-        typeAheadAdapter = SearchSuggestionsAdapter(this, android.R.layout.select_dialog_item, mutableListOf())
-        inputField.threshold = 2
-        inputField.setAdapter(typeAheadAdapter)
 
         viewModel.typeAheadWords.observe(this, Observer {
             typeAheadAdapter.clear()

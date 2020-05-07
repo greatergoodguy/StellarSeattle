@@ -24,6 +24,12 @@ internal abstract class PresentationModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     internal abstract fun bindMainViewModel(viewModel: MainViewModel): ViewModel
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(VenueDetailsViewModel::class)
+    internal abstract fun bindVenueDetailsViewModel(viewModel: VenueDetailsViewModel): ViewModel
 }
 
 @Scope
