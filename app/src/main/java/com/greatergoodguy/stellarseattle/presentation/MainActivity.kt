@@ -2,7 +2,9 @@ package com.greatergoodguy.stellarseattle.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.TextView.OnEditorActionListener
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -10,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.greatergoodguy.stellarseattle.BuildConfig
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.adapter.SearchSuggestionsAdapter
 import com.greatergoodguy.stellarseattle.adapter.VenueAdapter
@@ -21,6 +22,7 @@ import com.greatergoodguy.stellarseattle.storage.SharedPrefsStorage
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -71,6 +73,15 @@ class MainActivity : AppCompatActivity() {
         typeAheadAdapter = SearchSuggestionsAdapter(this, android.R.layout.select_dialog_item, mutableListOf())
         inputField.threshold = 2
         inputField.setAdapter(typeAheadAdapter)
+
+        inputField.setOnEditorActionListener { textView, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                inputField.dismissDropDown()
+                viewModel.getVenues(viewModel.searchQuery.value.orEmpty())
+                true
+            }
+            false
+        }
 
         // Set up viewModel observable fields
         viewModel.venues.observe(this, Observer {
