@@ -2,7 +2,6 @@ package com.greatergoodguy.stellarseattle.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,14 +14,12 @@ import com.greatergoodguy.stellarseattle.BuildConfig
 import com.greatergoodguy.stellarseattle.R
 import com.greatergoodguy.stellarseattle.adapter.SearchSuggestionsAdapter
 import com.greatergoodguy.stellarseattle.adapter.VenueAdapter
-import com.greatergoodguy.stellarseattle.api.FourSquareAPI
 import com.greatergoodguy.stellarseattle.databinding.ActivityMainBinding
 import com.greatergoodguy.stellarseattle.di.ViewModelFactory
 import com.greatergoodguy.stellarseattle.domain.Venue
 import com.greatergoodguy.stellarseattle.storage.SharedPrefsStorage
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -50,13 +47,7 @@ class MainActivity : AppCompatActivity() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        fab.setOnClickListener {
-            val intent = Intent(this, MapActivity::class.java)
-            val venues = viewModel.venues.value ?: listOf()
-            intent.putExtra(MapActivity.KEY_VENUES, ArrayList(venues))
-            startActivity(intent)
-        }
-
+        // Set up UI components
         viewManager = LinearLayoutManager(this)
         viewAdapter = VenueAdapter(baseContext, storage, object: VenueAdapter.OnItemClickListener {
             override fun onItemClick(item: Venue) {
@@ -69,8 +60,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.apply {
             layoutManager = viewManager
             adapter = viewAdapter
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
             addItemDecoration(
                 DividerItemDecoration(
@@ -83,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         inputField.threshold = 2
         inputField.setAdapter(typeAheadAdapter)
 
+        // Set up viewModel observable fields
         viewModel.venues.observe(this, Observer {
             viewAdapter.setData(it)
             viewAdapter.notifyDataSetChanged()
@@ -98,6 +88,15 @@ class MainActivity : AppCompatActivity() {
             typeAheadAdapter.addAll(it)
             typeAheadAdapter.notifyDataSetChanged()
         })
+
+        // Set up click listeners
+        fab.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            val venues = viewModel.venues.value ?: listOf()
+            intent.putExtra(MapActivity.KEY_VENUES, ArrayList(venues))
+            startActivity(intent)
+        }
+
     }
 
     override fun onResume() {
