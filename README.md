@@ -15,7 +15,10 @@ This code base will run as is. Just clone it and run in Android Studio.
 		* Retrofit
 		* Coroutines
 	* Shared Prefs Storage
+	* Dagger Dependency Injection	
+	* Picasso	
 	* MVVM
+	* Databinding
 3. Testing
 	* Unit Test
 	* ViewModel Test
