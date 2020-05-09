@@ -94,10 +94,22 @@
                     app:lottie_autoPlay="true"
                     showIf="@{viewModel.isVenueDetailsAPIRunning}"/>
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvErrorMessage"
+                    style="@style/Wrap"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#FF0000"
+                    android:text="Error: Something went wrong"
+                    tools:text="Error"
+                    showIf="@{!viewModel.isVenueDetailsAPIRunning &amp;&amp; !viewModel.isVenueDetailsAPISuccessful}"/>
+
                 <LinearLayout
                     android:id="@+id/detailsContainer"
                     style="@style/Block"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    showIf="@{!viewModel.isVenueDetailsAPIRunning &amp;&amp; viewModel.isVenueDetailsAPISuccessful}">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvDescription"

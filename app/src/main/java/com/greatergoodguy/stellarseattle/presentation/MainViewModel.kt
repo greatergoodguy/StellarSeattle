@@ -19,11 +19,11 @@ class MainViewModel @Inject constructor(
     val typeAheadWords = MutableLiveData<List<String>>().apply { value = listOf() }
 
     val isSearchApiRunning = MutableLiveData<Boolean>().apply { value = false }
-    val isSearchApiSuccessful = MutableLiveData<Boolean>().apply { value = false }
+    val isSearchApiSuccessful = MutableLiveData<Boolean>().apply { value = true }
 
     private var searchSuggestionJob: Job? = null
 
-    fun onSearch(searchQuery: String) {
+    fun getVenues(searchQuery: String) {
         viewModelScope.launch {
             searchSuggestionJob?.cancel()
             isSearchApiRunning.postValue(true)

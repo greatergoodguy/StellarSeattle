@@ -54,7 +54,7 @@
                         android:layout_marginTop="@dimen/keyline_1"
                         android:text="Search"
                         android:textColor="@color/white"
-                        android:onClick="@{() -> viewModel.onSearch(viewModel.searchQuery)}"
+                        android:onClick="@{() -> viewModel.getVenues(viewModel.searchQuery)}"
                         android:enabled="@{!viewModel.isSearchApiRunning}"/>
 
                 </LinearLayout>
@@ -72,6 +72,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 showIf="@{!viewModel.isSearchApiRunning &amp;&amp; viewModel.isSearchApiSuccessful}"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvErrorMessage"
+                style="@style/Wrap"
+                android:layout_centerHorizontal="true"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#FF0000"
+                android:text="Error: Something went wrong"
+                tools:text="Error"
+                showIf="@{!viewModel.isSearchApiRunning &amp;&amp; !viewModel.isSearchApiSuccessful}"/>
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/spinner"

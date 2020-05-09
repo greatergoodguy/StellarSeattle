@@ -33,6 +33,7 @@ class VenueDetailsViewModel @Inject constructor(
     val showWebsite = websiteUrl.map { !it.isNullOrEmpty() }
 
     val isVenueDetailsAPIRunning = MutableLiveData<Boolean>().apply { value = false }
+    val isVenueDetailsAPISuccessful = MutableLiveData<Boolean>().apply { value = true }
 
 
     fun setVenue(_venue: Venue) {
@@ -45,7 +46,10 @@ class VenueDetailsViewModel @Inject constructor(
             try {
                 val venueDetailsResponse = fourSquareAPI.getVenueDetails(venueId, BuildConfig.FoursquareClientId, BuildConfig.FoursquareClientSecret, BuildConfig.FoursquareVersion)
                 venueDetails.postValue(venueDetailsResponse.response.venue.toVenueDetails())
-            } catch (e: Exception) {}
+                isVenueDetailsAPISuccessful.postValue(true)
+            } catch (e: Exception) {
+                isVenueDetailsAPISuccessful.postValue(false)
+            }
             isVenueDetailsAPIRunning.postValue(false)
         }
     }
