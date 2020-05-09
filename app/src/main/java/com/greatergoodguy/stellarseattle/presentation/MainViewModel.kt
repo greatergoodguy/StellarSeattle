@@ -19,7 +19,8 @@ class MainViewModel @Inject constructor(
     val typeAheadWords = MutableLiveData<List<String>>().apply { value = listOf() }
 
     val isSearchApiRunning = MutableLiveData<Boolean>().apply { value = false }
-    val isSearchApiSuccessful = MutableLiveData<Boolean>().apply { value = true }
+    val isSearchApiSuccessful = MutableLiveData<Boolean>().apply { value = false }
+    val showApiError = MutableLiveData<Boolean>().apply { value = false }
 
     private var searchSuggestionJob: Job? = null
 
@@ -27,6 +28,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             searchSuggestionJob?.cancel()
             isSearchApiRunning.postValue(true)
+            showApiError.postValue(false)
             try {
                 val venuesResponse = fourSquareAPI.getVenues(
                     BuildConfig.FoursquareClientId,
@@ -41,6 +43,7 @@ class MainViewModel @Inject constructor(
                 isSearchApiSuccessful.postValue(true)
             } catch(e: Exception) {
                 isSearchApiSuccessful.postValue(false)
+                showApiError.postValue(true)
             }
             isSearchApiRunning.postValue(false)
         }

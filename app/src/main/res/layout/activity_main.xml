@@ -82,7 +82,7 @@
                 android:textColor="#FF0000"
                 android:text="Error: Something went wrong"
                 tools:text="Error"
-                showIf="@{!viewModel.isSearchApiRunning &amp;&amp; !viewModel.isSearchApiSuccessful}"/>
+                showIf="@{viewModel.showApiError}"/>
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/spinner"
